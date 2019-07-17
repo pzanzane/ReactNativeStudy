@@ -1,59 +1,42 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import ListItem from './src/components/ListItem/ListItem';
+import ComponentInput from './src/components/AddItem/ComponentInput';
+import ListContainer from './src/components/ListContainer/ListContainer';
 
 export default class App extends React.Component {
 
   state = {
-    text: '',
     arrays:[] 
   }
 
-  printHandler = (event) => {
-    this.setState({text: event})
-  }
+  onPressAdd = (value) => {
 
-  onPressAdd = () => {
-
-    if(this.state.text != ''){
-
-      this.setState(prevState => {
-          return {
-            arrays: prevState.arrays.concat(prevState.text)
-          };
-      });
-    }else{
-      alert('No data')
+    if(value === ""){
+      alert('Input is empty')
+      return
     }
+
+    this.setState(prevState => {
+      return {
+        arrays: prevState.arrays.concat(value)
+      };
+    });
     
   }
  
 
   render() {
 
-    const arraysOutput = this.state.arrays.map( (text, i) => (
-      <ListItem key = {i} value = {text}/>
-    ))
     return (
       <View style={styles.container}>
 
-        <View style = {styles.inputContainer}>
+        <ComponentInput 
+        style = {styles.inputContainer}  
+        onPressAdd = {this.onPressAdd}/>
 
-        <TextInput style={styles.styleInput}
-                  onChangeText = {this.printHandler}
-                  value = {this.state.text}/>
-
-          <Button 
-            style = {styles.styleButton}
-            title = "Add"
-            onPress = {this.onPressAdd}
-          />
-
-        </View>
-
-        <View style={styles.listContainer}>
-          {arraysOutput}
-        </View>
+        <ListContainer 
+        arrays = {this.state.arrays}/>
 
  
       </View>
@@ -77,18 +60,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'space-around',
     alignItems: 'flex-start'
-  },
-  styleInput: {
-    width: '70%',
-    borderColor: 'gray', 
-    borderWidth: 1
-  },
-  styleButton: {
-    width: '30%'
-  },
-  listContainer: {
-    width: '100%',
-    marginTop: 10,
-    padding: 5
-  }  
+  }
 });
